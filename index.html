@@ -3,181 +3,358 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>StudyBuddy — HTML-only Front-end Mock</title>
+  <title>StudyBuddy — Colorful Animated HTML-only Mock</title>
+
+  <!-- All CSS is embedded here so this is a single HTML file (no external CSS/JS). -->
+  <style>
+    /* ---------- Variables & base ---------- */
+    :root{
+      --bg-1: #071227;    /* deep */
+      --bg-2: #061021;    /* deeper */
+      --glass: rgba(255,255,255,0.04);
+      --muted: rgba(230,245,255,0.78);
+      --accent-a: #7b3aed;
+      --accent-b: #06b6d4;
+      --accent-c: #f59e0b;
+      --card-shadow: 0 14px 40px rgba(2,6,23,0.65);
+      --glass-border: rgba(255,255,255,0.06);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: dark;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      background:
+        radial-gradient(650px 240px at 10% 8%, rgba(123,58,237,0.06), transparent 12%),
+        radial-gradient(520px 240px at 92% 78%, rgba(6,182,212,0.04), transparent 12%),
+        linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      min-height:100vh;
+      color:#eaf6ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    /* ---------- layout grid ---------- */
+    .app{
+      width:100%;
+      max-width:1200px;
+      display:grid;
+      grid-template-columns:320px 1fr 360px;
+      gap:20px;
+      align-items:start;
+    }
+    @media (max-width:1100px){ .app{grid-template-columns:1fr;padding:0 12px} .right{order:3} .left{order:1} .center{order:2} }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;
+      padding:18px;
+      border:1px solid var(--glass-border);
+      box-shadow: var(--card-shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* ---------- decorative shapes ---------- */
+    .orb {
+      position:absolute;
+      right:-80px; top:-60px;
+      width:260px;height:260px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(123,58,237,0.09), rgba(6,182,212,0.03) 40%, transparent 60%);
+      transform:rotate(12deg); filter:blur(8px); pointer-events:none; mix-blend-mode:screen;
+      animation:orbMove 8s ease-in-out infinite;
+    }
+    @keyframes orbMove{0%{transform:translateY(0) rotate(12deg)}50%{transform:translateY(-12px) rotate(8deg)}100%{transform:translateY(0) rotate(12deg)}}
+
+    /* ---------- left column ---------- */
+    .left .brand{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));display:grid;place-items:center;font-weight:800;font-size:18px;transform:rotate(-6deg);box-shadow:0 10px 30px rgba(124,58,237,0.14)}
+    .brand h1{margin:0;font-size:18px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .quick-btn{
+      padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border:1px solid rgba(255,255,255,0.02);text-align:center;font-weight:700;cursor:pointer;transition:transform .16s ease, box-shadow .16s;
+    }
+    .quick-btn:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(2,6,23,0.6)}
+
+    .status{margin-top:14px;padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(123,58,237,0.03), rgba(6,182,212,0.02));}
+    .progress{height:8px;background:rgba(255,255,255,0.02);border-radius:999px;overflow:hidden;margin-top:8px}
+    .progress > i{display:block;height:100%;width:52%;background:linear-gradient(90deg,var(--accent-b),var(--accent-a));animation:prog 4s ease-in-out infinite}
+    @keyframes prog{0%{transform:translateX(-12%)}50%{transform:translateX(0)}100%{transform:translateX(12%)}}
+
+    .shortcut-item{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+    .badge{width:44px;height:44px;border-radius:8px;background:linear-gradient(90deg,var(--accent-b),var(--accent-a));display:grid;place-items:center;font-weight:800}
+
+    /* ---------- center (main) ---------- */
+    .center .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .center h2{margin:0;font-size:20px}
+    .center p{margin:6px 0 0;color:var(--muted)}
+
+    .searchbar{display:flex;gap:12px;margin-top:14px}
+    .searchbar input{flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--glass-border);background:transparent;color:inherit;font-size:14px;outline:none}
+    .primary{background:linear-gradient(90deg,var(--accent-a),var(--accent-b));color:white;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(124,58,237,0.12)}
+
+    .panels{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+    @media (max-width:1100px){ .panels{grid-template-columns:1fr} }
+
+    /* Chat */
+    .chat{display:flex;flex-direction:column;min-height:460px;padding:14px;border-radius:12px;position:relative;}
+    .chat .avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(90deg,var(--accent-b),var(--accent-a));display:grid;place-items:center;font-weight:800}
+    .messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:14px;margin-top:10px}
+    .bubble{max-width:78%;padding:14px;border-radius:14px;font-size:15px;line-height:1.35;position:relative}
+    .bubble.ai{align-self:flex-start;background:linear-gradient(180deg,rgba(255,255,255,0.012),transparent);border:1px solid rgba(255,255,255,0.02);color:var(--muted);animation:fadeInUp .36s both}
+    .bubble.user{align-self:flex-end;background:linear-gradient(90deg,#10b981,#7c3aed);color:white;border-bottom-right-radius:4px;box-shadow:0 12px 30px rgba(124,58,237,0.14);animation:popIn .28s both}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes popIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+    .bubble .meta{display:block;margin-top:8px;font-size:12px;color:var(--muted)}
+
+    .composer{display:flex;gap:10px;align-items:center;margin-top:12px}
+    .composer input{flex:1;padding:10px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;color:inherit}
+
+    /* ---------- notebook (right inside panels) ---------- */
+    .notebook{padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(123,58,237,0.03), transparent);border:1px dashed rgba(255,255,255,0.03)}
+    .nb-header{display:flex;justify-content:space-between;align-items:center}
+    .nb-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    .nb-item{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);cursor:pointer;transition:transform .12s}
+    .nb-item:hover{transform:translateX(6px)}
+    .nb-item .tag{width:44px;height:44px;border-radius:8px;background:linear-gradient(90deg,var(--accent-b),var(--accent-a));display:grid;place-items:center;font-weight:700}
+
+    details.note{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.02)}
+    details summary{cursor:pointer;font-weight:700;outline:none}
+    details[open] summary::after{content:"▲";float:right}
+    details summary::after{content:"▼";float:right}
+
+    /* ---------- right column ---------- */
+    .right .section{margin-bottom:12px}
+    .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+    .cal-cell{padding:10px;border-radius:8px;text-align:center;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);font-size:13px}
+    .tasks{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+    .task{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+
+    /* Flashcards (CSS only) */
+    .flashcards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px}
+    @media (max-width:800px){ .flashcards{grid-template-columns:1fr} }
+    .fcard{perspective:1000px}
+    .fcard input{display:none}
+    .fcard .card-inner{position:relative;width:100%;height:140px;border-radius:12px;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+    .fcard input:checked + .card-inner{transform:rotateY(180deg)}
+    .face{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;padding:12px;font-size:15px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(90deg,#071122,#081628)}
+    .face.back{transform:rotateY(180deg);background:linear-gradient(90deg,#061022,#0b1220);color:#fff}
+
+    /* ---------- micro interactions ---------- */
+    .pulse{animation:pulse 2.6s infinite}
+    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+    .muted{color:var(--muted)}
+    .small{font-size:13px;color:var(--muted)}
+    .center .hint{margin-top:8px;color:var(--muted);font-size:13px}
+  </style>
 </head>
 <body>
+  <div class="app">
 
-  <!-- Top header -->
-  <header>
-    <h1>StudyBuddy</h1>
-    <p>AI Tutor • Notebook LM (UI-only) • Reminders • Flashcards</p>
-    <hr>
-  </header>
-
-  <!-- Main layout using semantic sections and simple HTML controls -->
-  <main>
-
-    <!-- Left column: quick controls & shortcuts -->
-    <section aria-labelledby="quick-controls">
-      <h2 id="quick-controls">Quick Controls</h2>
-
-      <p>
-        <button type="button">Start Session</button>
-        <button type="button">New Flashcard</button>
-        <button type="button">New Note</button>
-        <button type="button">Quick Quiz</button>
-      </p>
-
-      <h3>Today</h3>
-      <p>2 tasks · 1 reminder</p>
-
-      <h3>Shortcuts</h3>
-      <ul>
-        <li><strong>Notebook: Biology</strong> — 12 notes (last: 2h)</li>
-        <li><strong>Flashcards: Chemistry</strong> — 48 cards</li>
-      </ul>
-    </section>
-
-    <hr>
-
-    <!-- Center column: AI Chat mock + search -->
-    <section aria-labelledby="ai-chat">
-      <h2 id="ai-chat">AI Tutor (UI-only)</h2>
-
-      <!-- Search bar (HTML-only) -->
-      <form aria-label="Search notes and ask AI" method="get" action="#">
-        <label for="search">Search or ask the AI:</label><br>
-        <input id="search" name="q" type="search" placeholder="e.g. Explain mitosis" />
-        <input type="submit" value="Search" />
-      </form>
-
-      <h3>Chat Preview</h3>
-
-      <!-- Chat transcript (static HTML messages) -->
-      <article aria-live="polite">
+    <!-- LEFT -->
+    <aside class="card left">
+      <div class="orb" aria-hidden="true"></div>
+      <div class="brand">
+        <div class="logo">SB</div>
         <div>
-          <strong>AI Tutor:</strong>
-          <p>Hi! I can explain topics, create flashcards, and suggest practice questions. (This is a static preview — no backend.)</p>
+          <h1>StudyBuddy</h1>
+          <p class="muted small">AI Tutor • Notebook LM • Reminders</p>
+        </div>
+      </div>
+
+      <div class="quick-grid">
+        <div class="quick-btn">Start Session<br><small class="muted">Focus timer</small></div>
+        <div class="quick-btn">New Flashcard<br><small class="muted">Quick add</small></div>
+        <div class="quick-btn">New Note<br><small class="muted">Capture idea</small></div>
+        <div class="quick-btn">Quick Quiz<br><small class="muted">5 Questions</small></div>
+      </div>
+
+      <div class="status">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Today</strong><div class="small muted">2 tasks • 1 reminder</div></div>
+          <div class="small muted" style="padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)">Focus: Biology</div>
+        </div>
+        <div class="progress"><i></i></div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="shortcut-item"><div class="badge">N1</div><div><strong>Notebook: Biology</strong><div class="muted small">12 notes • 2h ago</div></div></div>
+        <div class="shortcut-item" style="margin-top:8px"><div class="badge">F4</div><div><strong>Flashcards: Chemistry</strong><div class="muted small">48 cards</div></div></div>
+      </div>
+    </aside>
+
+    <!-- CENTER -->
+    <main class="card center">
+      <div class="top">
+        <div>
+          <h2>Welcome back — study with intent ✨</h2>
+          <p class="muted small">Ask the AI (UI-only), flip flashcards, and preview the Notebook LM.</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="muted small">Student Mode</div>
+          <div class="primary pulse" style="padding:10px 14px;border-radius:10px">New Session</div>
+        </div>
+      </div>
+
+      <div class="searchbar">
+        <input placeholder="Search notes, flashcards, or ask the AI (UI-only) — e.g. 'Explain mitosis'">
+        <div class="primary">Search</div>
+      </div>
+
+      <div class="panels">
+        <!-- Chat -->
+        <section class="chat">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="avatar">AI</div>
+              <div>
+                <div style="font-weight:700">AI Tutor</div>
+                <div class="small muted">ChatGPT • Gemini (UI placeholder)</div>
+              </div>
+            </div>
+            <div class="muted small">Model: GPT-5 / Gemini</div>
+          </div>
+
+          <div class="messages" aria-live="polite">
+            <div class="bubble ai">
+              Hi! 👋 I'm StudyBuddy. I can explain topics, create flashcards, and generate practice questions. (UI-only)
+              <span class="meta">Tip: add a backend to enable real AI.</span>
+            </div>
+
+            <div class="bubble user">
+              Explain photosynthesis simply.
+              <span class="meta">You • just now</span>
+            </div>
+
+            <div class="bubble ai">
+              Photosynthesis (simple): 1) Light absorbed by chlorophyll, 2) Water is split → O₂, 3) ATP/NADPH created, 4) CO₂ fixed into sugar.
+              <span class="meta">Study tip: write each step in one sentence.</span>
+            </div>
+          </div>
+
+          <div class="composer" aria-hidden="true">
+            <input placeholder="Type a message (UI-only)">
+            <div class="primary" style="padding:10px 12px;border-radius:10px">Send</div>
+          </div>
+        </section>
+
+        <!-- Notebook LM preview -->
+        <aside class="card" style="min-height:460px;padding:16px">
+          <div class="nb-header">
+            <div>
+              <h3 style="margin:0">Notebook LM</h3>
+              <div class="muted small">Semantic notes & recall (visual only)</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="muted small">Notebook</div>
+              <div style="padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)" class="small muted">Beta</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+            <input style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;color:inherit" placeholder="Search notebook (UI-only)">
+            <div class="primary" style="padding:8px 10px">Find</div>
+          </div>
+
+          <div class="nb-list">
+            <div class="nb-item"><div class="tag">B1</div><div><strong>Cell Structure</strong><div class="muted small">Summary & highlights</div></div></div>
+            <div class="nb-item"><div class="tag">Q2</div><div><strong>Genetics — Exam Tips</strong><div class="muted small">High-yield</div></div></div>
+            <div class="nb-item"><div class="tag">R3</div><div><strong>Lab Prep</strong><div class="muted small">Checklist</div></div></div>
+          </div>
+
+          <details class="note" open>
+            <summary>Open: Cell Structure — preview</summary>
+            <div style="margin-top:10px" class="muted small">Would show nearest semantic matches & highlights in a live app.</div>
+            <ul style="margin-top:10px">
+              <li><strong>Phospholipid bilayer</strong> — selective permeability</li>
+              <li><strong>Mitochondria</strong> — ATP production</li>
+              <li><strong>Ribosomes</strong> — protein synthesis</li>
+            </ul>
+          </details>
+        </aside>
+      </div>
+
+      <!-- Exam helper -->
+      <div style="margin-top:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3 style="margin:0">Exam Helper — Flashcards</h3>
+          <div class="muted small">Practice (CSS-only)</div>
         </div>
 
-        <div>
-          <strong>You:</strong>
-          <p>Explain photosynthesis simply.</p>
+        <div class="flashcards">
+          <label class="fcard">
+            <input type="checkbox">
+            <div class="card-inner">
+              <div class="face front"><strong>Q:</strong> What is the powerhouse of the cell?</div>
+              <div class="face back"><strong>A:</strong> Mitochondrion — makes ATP.</div>
+            </div>
+          </label>
+
+          <label class="fcard">
+            <input type="checkbox">
+            <div class="card-inner">
+              <div class="face front"><strong>Q:</strong> Products of photosynthesis?</div>
+              <div class="face back"><strong>A:</strong> Glucose and O₂ from CO₂ + H₂O + light.</div>
+            </div>
+          </label>
+
+          <label class="fcard">
+            <input type="checkbox">
+            <div class="card-inner">
+              <div class="face front"><strong>Q:</strong> 3 base pairs code for?</div>
+              <div class="face back"><strong>A:</strong> One amino acid (codon).</div>
+            </div>
+          </label>
+
+          <label class="fcard">
+            <input type="checkbox">
+            <div class="card-inner">
+              <div class="face front"><strong>Q:</strong> Unit of current?</div>
+              <div class="face back"><strong>A:</strong> Ampere (A).</div>
+            </div>
+          </label>
         </div>
+      </div>
+    </main>
 
-        <div>
-          <strong>AI Tutor:</strong>
-          <p>Photosynthesis: 1) Light absorbed, 2) Water split → O₂, 3) ATP/NADPH produced, 4) CO₂ fixed to sugar.</p>
+    <!-- RIGHT -->
+    <aside class="card right">
+      <div class="section">
+        <h3 style="margin:0">Study Calendar</h3>
+        <div class="muted small">September 2025</div>
+      </div>
+
+      <div class="calendar">
+        <div class="cal-cell small muted">Mon</div><div class="cal-cell small muted">Tue</div><div class="cal-cell small muted">Wed</div><div class="cal-cell small muted">Thu</div><div class="cal-cell small muted">Fri</div><div class="cal-cell small muted">Sat</div><div class="cal-cell small muted">Sun</div>
+        <div class="cal-cell">1</div><div class="cal-cell">2</div><div class="cal-cell">3</div><div class="cal-cell">4</div><div class="cal-cell">5</div><div class="cal-cell">6</div><div class="cal-cell">7</div>
+      </div>
+
+      <div style="margin-top:12px" class="section">
+        <h3 style="margin:0">Reminders</h3>
+        <div class="tasks">
+          <label class="task"><input type="checkbox"> <div><strong>Complete biology assignment</strong><div class="muted small">Due Sep 12</div></div></label>
+          <label class="task"><input type="checkbox"> <div><strong>Schedule mock test</strong><div class="muted small">Due Sep 14</div></div></label>
+          <label class="task"><input type="checkbox"> <div><strong>Revise flashcards: Chemistry</strong><div class="muted small">Due Today</div></div></label>
         </div>
-      </article>
+      </div>
 
-      <form aria-label="Compose message" method="post" action="#">
-        <label for="compose">Compose (UI-only):</label><br>
-        <input id="compose" name="message" type="text" placeholder="Type a message (UI-only)" />
-        <input type="submit" value="Send (UI-only)" />
-      </form>
-    </section>
-
-    <hr>
-
-    <!-- Right column: Notebook LM preview and Reminders -->
-    <section aria-labelledby="notebook">
-      <h2 id="notebook">Notebook LM — UI Preview</h2>
-
-      <p>This is a visual mock of a semantic notebook. (Real semantic search needs backend & embeddings.)</p>
-
-      <h3>Pages</h3>
-      <ol>
-        <li><strong>Cell Structure</strong> — Summary & highlights</li>
-        <li><strong>Genetics — Exam Tips</strong> — High-yield points</li>
-        <li><strong>Lab Prep Checklist</strong> — Supplies & steps</li>
-      </ol>
-
-      <!-- Expandable detail with summary -->
-      <details>
-        <summary>Open: Cell Structure — details</summary>
-        <p><strong>Phospholipid bilayer</strong> — selective permeability</p>
-        <p><strong>Mitochondria</strong> — ATP production</p>
-        <p><strong>Ribosomes</strong> — protein synthesis</p>
-      </details>
-
-      <h3>Reminders & Tasks</h3>
-      <form>
-        <fieldset>
-          <legend>Tasks (HTML-only checklist)</legend>
-          <label><input type="checkbox" name="task1"> Complete biology assignment — Due: Sep 12</label><br>
-          <label><input type="checkbox" name="task2"> Schedule mock test — Due: Sep 14</label><br>
-          <label><input type="checkbox" name="task3"> Revise flashcards: Chemistry — Due: Today</label>
-        </fieldset>
-      </form>
-    </section>
-
-    <hr>
-
-    <!-- Exam helper: flashcards using details/summary (front/back) -->
-    <section aria-labelledby="exam-helper">
-      <h2 id="exam-helper">Exam Helper — Flashcards (HTML-only)</h2>
-
-      <p>Click a card to flip and reveal the answer (implemented with &lt;details&gt;).</p>
-
-      <details>
-        <summary><strong>Q:</strong> What is the powerhouse of the cell?</summary>
-        <p><strong>A:</strong> Mitochondrion — produces ATP via oxidative phosphorylation.</p>
-      </details>
-
-      <details>
-        <summary><strong>Q:</strong> What are the products of photosynthesis?</summary>
-        <p><strong>A:</strong> Glucose and O₂ (from CO₂ + H₂O + light energy).</p>
-      </details>
-
-      <details>
-        <summary><strong>Q:</strong> What do 3 base pairs code for?</summary>
-        <p><strong>A:</strong> One amino acid (a codon in mRNA).</p>
-      </details>
-
-      <details>
-        <summary><strong>Q:</strong> Unit of electric current?</summary>
-        <p><strong>A:</strong> Ampere (A).</p>
-      </details>
-    </section>
-
-    <hr>
-
-    <!-- Simple calendar & study tips (HTML) -->
-    <section aria-labelledby="calendar">
-      <h2 id="calendar">Study Calendar (UI-only)</h2>
-
-      <!-- simple table calendar -->
-      <table border="1" cellspacing="0" cellpadding="6" summary="Mini calendar">
-        <caption>September 2025</caption>
-        <thead>
-          <tr>
-            <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td>
-          </tr>
-          <tr>
-            <td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3>Study Tips</h3>
-      <ul>
-        <li>Spaced repetition — revisit cards at increasing intervals</li>
-        <li>Teach back — explain concepts aloud to improve recall</li>
-      </ul>
-    </section>
-
-  </main>
-
-  <footer>
-    <hr>
-    <p>This page is an <strong>HTML-only front-end mock</strong>. To make features live (AI chat, Notebook LM, reminders), add JavaScript and a secure backend.</p>
-  </footer>
-
+      <div style="margin-top:12px">
+        <h3 style="margin:0">Study Tips</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div class="quick-btn">Spaced repetition<br><small class="muted">Revisit cards on schedule</small></div>
+          <div class="quick-btn">Teach back<br><small class="muted">Explain aloud</small></div>
+        </div>
+      </div>
+    </aside>
+  </div>
 </body>
 </html>
