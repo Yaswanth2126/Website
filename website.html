@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Basic Web App — Beginner HTML</title>
   <style>
-    /* Simple, beginner-friendly CSS */
     :root{
       --accent:#3478f6;
       --muted:#666;
@@ -20,11 +19,11 @@
     nav a{margin-left:10px;color:var(--accent);text-decoration:none}
     .card{background:var(--card);border-radius:10px;padding:16px;box-shadow:0 6px 18px rgba(20,30,40,0.06)}
 
-    /* layout for main area */
+ 
     .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
     @media (max-width:800px){.grid{grid-template-columns:1fr}}
 
-    /* To-Do list styles */
+
     .todo-input{display:flex;gap:8px;margin-bottom:12px}
     input[type=text]{flex:1;padding:10px;border-radius:8px;border:1px solid #e0e6ee}
     button{padding:10px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
@@ -35,7 +34,7 @@
     .todo-text.done{text-decoration:line-through;color:var(--muted)}
     .small{font-size:0.9rem;color:var(--muted)}
 
-    /* form styles */
+ 
     form.contact-form{display:flex;flex-direction:column;gap:8px}
     form input, form textarea{padding:10px;border-radius:8px;border:1px solid #e0e6ee}
     footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.9rem}
@@ -52,7 +51,7 @@
     </header>
 
     <main class="grid">
-      <!-- LEFT: main interactive area -->
+   
       <section class="card" id="todo">
         <h2>To‑Do List</h2>
         <p class="small">Add tasks, mark done, and they will be saved in your browser.</p>
@@ -69,8 +68,6 @@
           <button id="clearAll" style="background:#e74c3c">Clear all</button>
         </div>
       </section>
-
-      <!-- RIGHT: info + contact form -->
       <aside class="card">
         <h3>About this app</h3>
         <p class="small">This is a simple single-file example using only HTML, CSS and a little JavaScript. Great for beginners to edit and learn.</p>
@@ -92,7 +89,6 @@
   </div>
 
   <script>
-    // Simple To-Do logic using localStorage
     const taskInput = document.getElementById('taskInput');
     const addBtn = document.getElementById('addBtn');
     const tasksUl = document.getElementById('tasks');
@@ -171,8 +167,6 @@
         render();
       }
     });
-
-    // contact form (client-side demo only)
     document.getElementById('contactForm').addEventListener('submit', (e)=>{
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
@@ -183,9 +177,8 @@
       console.log('Contact submitted', {name,email,message});
       document.getElementById('contactForm').reset();
     });
-
-    // initial render
     render();
   </script>
 </body>
 </html>
+
