@@ -2,183 +2,451 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Basic Web App — Beginner HTML</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>StudyBuddy — Front-end Mock (HTML + CSS)</title>
   <style>
+    /* -------------------------
+       Variables & Base
+    ------------------------- */
     :root{
-      --accent:#3478f6;
-      --muted:#666;
-      --card:#fff;
-      --bg:#f4f7fb;
-      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      --bg1:#071028;
+      --card-grad: linear-gradient(135deg,#071028 0%, #08122a 60%);
+      --accent1: #7c3aed;
+      --accent2: #06b6d4;
+      --glass: rgba(255,255,255,0.04);
+      --muted: rgba(255,255,255,0.72);
+      --glass-border: rgba(255,255,255,0.06);
+      --card-shadow: 0 10px 40px rgba(2,6,23,0.6);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: dark;
     }
-    html,body{height:100%;margin:0;background:var(--bg);}
-    .container{max-width:900px;margin:32px auto;padding:20px;}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    h1{font-size:1.4rem;margin:0;color:#111}
-    nav a{margin-left:10px;color:var(--accent);text-decoration:none}
-    .card{background:var(--card);border-radius:10px;padding:16px;box-shadow:0 6px 18px rgba(20,30,40,0.06)}
 
- 
-    .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
-    @media (max-width:800px){.grid{grid-template-columns:1fr}}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(600px 220px at 10% 8%, rgba(124,58,237,0.06), transparent 12%),
+        radial-gradient(500px 200px at 92% 82%, rgba(6,182,212,0.04), transparent 12%),
+        linear-gradient(160deg,#041028 0%, #071028 100%);
+      color:#eef6ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
 
+    /* -------------------------
+       App layout
+    ------------------------- */
+    .wrap{
+      width:100%;
+      max-width:1280px;
+      display:grid;
+      grid-template-columns:320px 1fr 360px;
+      gap:20px;
+      align-items:start;
+    }
 
-    .todo-input{display:flex;gap:8px;margin-bottom:12px}
-    input[type=text]{flex:1;padding:10px;border-radius:8px;border:1px solid #e0e6ee}
-    button{padding:10px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
-    ul.todo-list{list-style:none;padding:0;margin:0}
-    ul.todo-list li{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;border:1px solid #f0f3f8;margin-bottom:8px}
-    .todo-left{display:flex;align-items:center;gap:10px}
-    .todo-left input[type=checkbox]{width:18px;height:18px}
-    .todo-text.done{text-decoration:line-through;color:var(--muted)}
-    .small{font-size:0.9rem;color:var(--muted)}
+    @media (max-width:1100px){
+      .wrap{grid-template-columns:1fr; padding:0 12px}
+      .right{order:3}
+      .left{order:1}
+      .center{order:2}
+    }
 
- 
-    form.contact-form{display:flex;flex-direction:column;gap:8px}
-    form input, form textarea{padding:10px;border-radius:8px;border:1px solid #e0e6ee}
-    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.9rem}
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:14px;
+      border:1px solid var(--glass-border);
+      padding:18px;
+      box-shadow: var(--card-shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* decorative */
+    .deco {
+      position:absolute;
+      right:-100px;top:-80px;width:300px;height:300px;border-radius:50%;
+      background:radial-gradient(circle at 20% 20%, rgba(124,58,237,0.08), transparent 30%);
+      transform:rotate(18deg);filter:blur(10px);pointer-events:none;
+    }
+
+    /* -------------------------
+       LEFT sidebar
+    ------------------------- */
+    .left {min-height:520px}
+    .brand{
+      display:flex;gap:12px;align-items:center;margin-bottom:12px;
+    }
+    .logo{
+      width:54px;height:54px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      display:grid;place-items:center;font-weight:800;font-size:18px;transform:rotate(-6deg);
+      box-shadow:0 6px 18px rgba(124,58,237,0.16);
+    }
+    .brand h1{margin:0;font-size:18px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    .shortcut-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .shortcut{
+      padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);
+      border:1px solid var(--glass-border);text-align:center;font-weight:600;font-size:13px;
+      cursor:pointer;transition:transform .18s, box-shadow .18s;
+    }
+    .shortcut:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(2,6,23,0.6)}
+
+    .status{
+      margin-top:18px;padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(124,58,237,0.04), rgba(6,182,212,0.02));
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .progress{height:8px;background:rgba(255,255,255,0.02);border-radius:999px;overflow:hidden;margin-top:10px}
+    .progress > i{display:block;height:100%;width:42%;background:linear-gradient(90deg,var(--accent2),var(--accent1));animation:load 4s ease-in-out infinite}
+    @keyframes load{0%{transform:translateX(-12%)}50%{transform:translateX(0)}100%{transform:translateX(12%)}}
+
+    .shortcuts-list{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+    .note-mini{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+
+    /* -------------------------
+       CENTER - Main
+    ------------------------- */
+    .center{min-height:720px}
+    .hero{display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .hero h2{margin:0;font-size:20px}
+    .hero p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+
+    .searchbar{display:flex;gap:12px;margin-top:16px}
+    .searchbar input{
+      flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--glass-border);
+      background:transparent;color:inherit;outline:none;font-size:14px;
+    }
+    .btn{
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:white;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer;
+      box-shadow:0 10px 30px rgba(124,58,237,0.12);
+    }
+
+    .panels{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+    @media (max-width:1100px){.panels{grid-template-columns:1fr}}
+
+    /* Chat mock */
+    .chat{display:flex;flex-direction:column;min-height:460px;padding:14px;border-radius:12px}
+    .chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .chat-title{display:flex;align-items:center;gap:10px}
+    .avatar{width:46px;height:46px;border-radius:10px;background:linear-gradient(90deg,var(--accent2),var(--accent1));display:grid;place-items:center;font-weight:800}
+
+    .messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:12px;margin-top:10px}
+    .bubble{max-width:78%;padding:12px;border-radius:12px;font-size:14px;line-height:1.35}
+    .bubble.ai{align-self:flex-start;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.02);color:var(--muted)}
+    .bubble.user{align-self:flex-end;background:linear-gradient(90deg,#0ea5a1,#7c3aed);color:white;border-bottom-right-radius:4px;box-shadow:0 8px 30px rgba(124,58,237,0.12)}
+
+    /* composer (non-functional placeholder) */
+    .composer{display:flex;gap:10px;align-items:center;margin-top:12px}
+    .composer input{flex:1;padding:10px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;color:inherit}
+
+    .notes-row{display:flex;gap:12px;align-items:center;margin-top:10px}
+    .hint{font-size:12px;color:var(--muted)}
+
+    /* -------------------------
+       RIGHT - Notebook & Reminders
+    ------------------------- */
+    .right{min-height:520px}
+    .section{margin-bottom:12px}
+    .section h3{margin:0 0 8px 0;font-size:15px}
+    .notebook{
+      padding:12px;border-radius:10px;border:1px dashed rgba(255,255,255,0.03);
+      background:linear-gradient(90deg, rgba(124,58,237,0.02), transparent);
+    }
+
+    /* Notebook list + interactive CSS-only preview */
+    .pages{display:flex;flex-direction:column;gap:10px}
+    .page {
+      display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border:1px solid rgba(255,255,255,0.02);cursor:pointer;transition:transform .18s;
+    }
+    .page:hover{transform:translateX(6px)}
+    .page .idx{width:46px;height:46px;border-radius:8px;background:linear-gradient(90deg,var(--accent2),var(--accent1));display:grid;place-items:center;font-weight:800}
+
+    /* Use <details> for an expandable Notebook-LM like detail (pure HTML element) */
+    details.note-detail{margin-top:12px;border-radius:10px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)}
+    details summary{font-weight:700;cursor:pointer;outline:none}
+    details[open] summary::after{content:"▲";float:right}
+    details summary::after{content:"▼";float:right}
+
+    /* Reminders / tasks */
+    .tasks{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+    .task{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+    .task input{width:18px;height:18px}
+
+    /* Flashcards (CSS-only flip using checkbox) */
+    .flashcards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px}
+    @media (max-width:800px){.flashcards{grid-template-columns:1fr}}
+    .fcard{perspective:1000px}
+    .fcard input{display:none}
+    .fcard .inner{
+      position:relative;width:100%;height:140px;border-radius:12px;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1);
+    }
+    /* when checkbox checked, rotate */
+    .fcard input:checked ~ .inner{transform:rotateY(180deg)}
+    .face{
+      position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;padding:12px;font-size:15px;
+      border:1px solid rgba(255,255,255,0.03);background:linear-gradient(90deg,#071122,#081628);
+    }
+    .face.back{transform:rotateY(180deg);background:linear-gradient(90deg,#071022,#0b1220);color:#fff}
+
+    /* subtle micro-interactions */
+    .float{animation:float 6s ease-in-out infinite}
+    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+
+    /* footer small */
+    .foot{font-size:12px;color:var(--muted);margin-top:12px;text-align:center}
+
+    /* small utility */
+    .muted{color:var(--muted)}
+    .row{display:flex;gap:12px;align-items:center}
+    .tag{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);font-size:12px}
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Basic Web App <span class="small">(Beginner HTML + JS)</span></h1>
-      <nav>
-        <a href="#todo">To‑Do</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+  <div class="wrap">
+    <!-- LEFT -->
+    <aside class="panel left">
+      <div class="deco" aria-hidden="true"></div>
+      <div class="brand">
+        <div class="logo">SB</div>
+        <div>
+          <h1>StudyBuddy</h1>
+          <p class="muted">AI tutor • Notebook LM preview • Reminders</p>
+        </div>
+      </div>
 
-    <main class="grid">
-   
-      <section class="card" id="todo">
-        <h2>To‑Do List</h2>
-        <p class="small">Add tasks, mark done, and they will be saved in your browser.</p>
+      <div class="shortcut-grid" aria-hidden="true">
+        <div class="shortcut">Start Session<br><small class="muted">Focus timer & music</small></div>
+        <div class="shortcut">New Flashcard<br><small class="muted">Quick add</small></div>
+        <div class="shortcut">New Note<br><small class="muted">Capture idea</small></div>
+        <div class="shortcut">Quick Quiz<br><small class="muted">5 Qs</small></div>
+      </div>
 
-        <div class="todo-input" aria-label="add-todo">
-          <input id="taskInput" type="text" placeholder="Add a new task (e.g. Buy groceries)" />
-          <button id="addBtn">Add</button>
+      <div class="status">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Today</strong><div class="muted" style="font-size:13px">2 tasks • 1 reminder</div></div>
+          <div class="tag">Focus: Biology</div>
+        </div>
+        <div class="progress"><i></i></div>
+      </div>
+
+      <div class="shortcuts-list">
+        <div class="note-mini">
+          <div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(90deg,var(--accent2),var(--accent1));display:grid;place-items:center;font-weight:700">N1</div>
+          <div>
+            <div style="font-weight:700">Notebook: Biology</div>
+            <div class="muted">12 notes • last: 2h</div>
+          </div>
         </div>
 
-        <ul id="tasks" class="todo-list" aria-live="polite"></ul>
-
-        <div style="display:flex;gap:8px;margin-top:10px;">
-          <button id="clearCompleted">Clear completed</button>
-          <button id="clearAll" style="background:#e74c3c">Clear all</button>
+        <div class="note-mini">
+          <div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:grid;place-items:center;font-weight:700">F4</div>
+          <div>
+            <div style="font-weight:700">Flashcards: Chemistry</div>
+            <div class="muted">48 cards</div>
+          </div>
         </div>
-      </section>
-      <aside class="card">
-        <h3>About this app</h3>
-        <p class="small">This is a simple single-file example using only HTML, CSS and a little JavaScript. Great for beginners to edit and learn.</p>
+      </div>
+    </aside>
 
-        <h4>Contact (client-side only)</h4>
-        <form id="contactForm" class="contact-form" action="#" onsubmit="return false;">
-          <input id="name" type="text" placeholder="Your name" required />
-          <input id="email" type="email" placeholder="you@example.com" required />
-          <textarea id="message" rows="4" placeholder="Message" required></textarea>
-          <button id="sendContact">Send</button>
-        </form>
-        <p id="contactResp" class="small" aria-live="polite"></p>
-      </aside>
+    <!-- CENTER -->
+    <main class="panel center">
+      <div class="hero">
+        <div>
+          <h2>Welcome back — study smarter ✨</h2>
+          <p class="muted">Ask the AI, review flashcards, manage reminders, or open Notebook LM (UI-only).</p>
+        </div>
+        <div class="row">
+          <div class="muted">Student Mode</div>
+          <button class="btn">New Session</button>
+        </div>
+      </div>
+
+      <div class="searchbar">
+        <input aria-label="Search" placeholder="Search notes, flashcards, or ask the AI (UI-only) — e.g. 'Explain mitosis'">
+        <button class="btn">Search</button>
+      </div>
+
+      <div class="panels">
+        <!-- Chat mock -->
+        <div class="chat">
+          <div class="chat-head">
+            <div class="chat-title">
+              <div class="avatar">AI</div>
+              <div>
+                <div style="font-weight:700">AI Tutor</div>
+                <div class="muted" style="font-size:12px">ChatGPT • Gemini (placeholder UI)</div>
+              </div>
+            </div>
+            <div class="muted">Model: GPT-5 / Gemini</div>
+          </div>
+
+          <div class="messages" role="log" aria-live="polite">
+            <div class="bubble ai">Hi! I'm StudyBuddy. I can explain topics, create flashcards, and generate practice questions. (UI mock — no real AI calls)</div>
+            <div class="bubble user">Explain photosynthesis simply.</div>
+            <div class="bubble ai">Photosynthesis steps: 1) Light absorption, 2) Water split → O₂, 3) ATP/NADPH formed, 4) CO₂ fixed to make glucose.</div>
+          </div>
+
+          <div class="composer" aria-hidden="true">
+            <input placeholder="Type message (UI-only)">
+            <button class="btn">Send</button>
+          </div>
+
+          <div class="notes-row">
+            <div class="hint">Tip: This is a static front-end preview. Add backend to enable real AI & persistence.</div>
+          </div>
+        </div>
+
+        <!-- Notebook LM preview -->
+        <aside class="panel right" style="min-height:460px">
+          <div class="section">
+            <h3>Notebook LM — Semantic Notebook (UI preview)</h3>
+            <div class="muted" style="font-size:13px">Organize notes, run semantic search, and keep context (visual only).</div>
+          </div>
+
+          <div class="notebook">
+            <div class="pages" role="list">
+              <div class="page" role="listitem">
+                <div class="idx">B1</div>
+                <div>
+                  <div style="font-weight:700">Cell Structure</div>
+                  <div class="muted">Summary & highlights</div>
+                </div>
+              </div>
+
+              <div class="page" role="listitem">
+                <div class="idx">Q2</div>
+                <div>
+                  <div style="font-weight:700">Genetics — Exam Tips</div>
+                  <div class="muted">High-yield points</div>
+                </div>
+              </div>
+
+              <div class="page" role="listitem">
+                <div class="idx">R3</div>
+                <div>
+                  <div style="font-weight:700">Lab Prep Checklist</div>
+                  <div class="muted">Supplies & steps</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expandable detail (pure HTML) -->
+            <details class="note-detail">
+              <summary>Open: Cell Structure — semantic view</summary>
+              <div style="margin-top:10px" class="muted">This panel would show embeddings, nearest notes, and extracted highlights in a real app.</div>
+              <ul style="margin-top:10px">
+                <li><strong>Phospholipid bilayer</strong> — selective permeability</li>
+                <li><strong>Mitochondria</strong> — ATP production</li>
+                <li><strong>Ribosomes</strong> — protein synthesis</li>
+              </ul>
+            </details>
+          </div>
+
+          <div style="margin-top:12px" class="section">
+            <h3>Reminders</h3>
+            <div class="tasks">
+              <label class="task"><input type="checkbox"> <div><strong>Complete biology assignment</strong><div class="muted" style="font-size:12px">Due: Sep 12</div></div></label>
+              <label class="task"><input type="checkbox"> <div><strong>Schedule mock test</strong><div class="muted" style="font-size:12px">Due: Sep 14</div></div></label>
+              <label class="task"><input type="checkbox"> <div><strong>Revise flashcards: Chemistry</strong><div class="muted" style="font-size:12px">Due: Today</div></div></label>
+            </div>
+          </div>
+
+          <div class="foot">Pro tip: connect a calendar and persistent storage to make reminders real (requires backend).</div>
+        </aside>
+      </div>
+
+      <!-- Exam helper -->
+      <div style="margin-top:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3 style="margin:0">Exam Helper — Flashcards & Quick Quiz</h3>
+          <div class="muted">Practice mode (CSS-only flips)</div>
+        </div>
+
+        <div class="flashcards">
+          <!-- card 1 -->
+          <label class="fcard">
+            <input type="checkbox">
+            <div class="inner">
+              <div class="face front">Q: What is the powerhouse of the cell?</div>
+              <div class="face back">A: Mitochondrion — makes ATP via oxidative phosphorylation.</div>
+            </div>
+          </label>
+
+          <!-- card 2 -->
+          <label class="fcard">
+            <input type="checkbox">
+            <div class="inner">
+              <div class="face front">Q: Products of photosynthesis?</div>
+              <div class="face back">A: Glucose and O₂ from CO₂ and H₂O using light energy.</div>
+            </div>
+          </label>
+
+          <!-- card 3 -->
+          <label class="fcard">
+            <input type="checkbox">
+            <div class="inner">
+              <div class="face front">Q: 3 base pairs code for?</div>
+              <div class="face back">A: One amino acid (codon in mRNA).</div>
+            </div>
+          </label>
+
+          <!-- card 4 -->
+          <label class="fcard">
+            <input type="checkbox">
+            <div class="inner">
+              <div class="face front">Q: Unit of electric current?</div>
+              <div class="face back">A: Ampere (A).</div>
+            </div>
+          </label>
+        </div>
+      </div>
     </main>
 
-    <footer class="card">
-      <p class="small">Tip: open browser console (F12) to see logs. Edit the file to customize colors and text.</p>
-    </footer>
+    <!-- RIGHT (additional widgets) -->
+    <aside class="panel right">
+      <div class="section">
+        <h3>Study Calendar</h3>
+        <div class="muted" style="font-size:13px">September 2025</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+        <div class="tag" style="text-align:center;padding:8px">Mon</div>
+        <div class="tag" style="text-align:center;padding:8px">Tue</div>
+        <div class="tag" style="text-align:center;padding:8px">Wed</div>
+        <div class="tag" style="text-align:center;padding:8px">Thu</div>
+        <div class="tag" style="text-align:center;padding:8px">Fri</div>
+        <div class="tag" style="text-align:center;padding:8px">Sat</div>
+        <div class="tag" style="text-align:center;padding:8px">Sun</div>
+
+        <!-- demo days -->
+        <div class="tag" style="opacity:.7;padding:10px">1</div>
+        <div class="tag" style="opacity:.7;padding:10px">2</div>
+        <div class="tag" style="opacity:.7;padding:10px">3</div>
+        <div class="tag" style="opacity:.7;padding:10px">4</div>
+        <div class="tag" style="opacity:.7;padding:10px">5</div>
+        <div class="tag" style="opacity:.7;padding:10px">6</div>
+        <div class="tag" style="opacity:.7;padding:10px">7</div>
+      </div>
+
+      <div style="margin-top:12px">
+        <h3 style="margin:0 0 8px 0">Study Tips</h3>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="shortcut">Spaced repetition — revisit cards at intervals</div>
+          <div class="shortcut">Teach back — explain aloud what you learned</div>
+        </div>
+      </div>
+    </aside>
+
   </div>
-
-  <script>
-    const taskInput = document.getElementById('taskInput');
-    const addBtn = document.getElementById('addBtn');
-    const tasksUl = document.getElementById('tasks');
-
-    function loadTasks(){
-      const raw = localStorage.getItem('basic_todo_tasks');
-      return raw ? JSON.parse(raw) : [];
-    }
-    function saveTasks(tasks){
-      localStorage.setItem('basic_todo_tasks', JSON.stringify(tasks));
-    }
-
-    function render(){
-      const tasks = loadTasks();
-      tasksUl.innerHTML = '';
-      if(tasks.length === 0){
-        tasksUl.innerHTML = '<li class="small">No tasks yet — add one above!</li>';
-        return;
-      }
-      tasks.forEach((t, i) => {
-        const li = document.createElement('li');
-        const left = document.createElement('div');
-        left.className = 'todo-left';
-
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = t.done;
-        cb.addEventListener('change', ()=>{
-          const all = loadTasks();
-          all[i].done = cb.checked;
-          saveTasks(all);
-          render();
-        });
-
-        const text = document.createElement('span');
-        text.textContent = t.text;
-        text.className = t.done ? 'todo-text done' : 'todo-text';
-
-        left.appendChild(cb);
-        left.appendChild(text);
-
-        const del = document.createElement('button');
-        del.textContent = 'Delete';
-        del.style.background = '#f6f7fb';
-        del.addEventListener('click', ()=>{
-          const all = loadTasks();
-          all.splice(i,1);
-          saveTasks(all);
-          render();
-        });
-
-        li.appendChild(left);
-        li.appendChild(del);
-        tasksUl.appendChild(li);
-      })
-    }
-
-    addBtn.addEventListener('click', ()=>{
-      const text = taskInput.value.trim();
-      if(!text) return alert('Please type a task');
-      const all = loadTasks();
-      all.push({text, done:false, created:Date.now()});
-      saveTasks(all);
-      taskInput.value = '';
-      render();
-    });
-
-    document.getElementById('clearCompleted').addEventListener('click', ()=>{
-      const all = loadTasks().filter(t => !t.done);
-      saveTasks(all);
-      render();
-    });
-    document.getElementById('clearAll').addEventListener('click', ()=>{
-      if(confirm('Clear all tasks?')){
-        saveTasks([]);
-        render();
-      }
-    });
-    document.getElementById('contactForm').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-      // In a real app you'd send this to a server. Here we just show a message.
-      document.getElementById('contactResp').textContent = `Thanks ${name}! (Demo only — no email sent)`;
-      console.log('Contact submitted', {name,email,message});
-      document.getElementById('contactForm').reset();
-    });
-    render();
-  </script>
 </body>
 </html>
-
